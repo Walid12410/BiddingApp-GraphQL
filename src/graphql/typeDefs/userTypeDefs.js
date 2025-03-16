@@ -39,7 +39,7 @@ const userTypeDefs = gql`
     },
 
     type Mutation {
-        loginUser(inpup: LoginInput!): AuthPayload!,
+        loginUser(input: LoginInput!): AuthPayload!,
         createUser(input: SignupInput!): AuthPayload!,
         updateUser(input: EditInput!, id: ID!): User!,
     }

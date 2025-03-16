@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 //@TODO: cONFIG TOKEN ENV FILE
-
+//@TODO: Is admin token generate
 
 // ✅ Initialize Apollo Server
 const server = new ApolloServer({
