@@ -2,6 +2,7 @@ import { sequelize } from "../config/db";
 import { DataTypes } from "sequelize";
 import { Category } from "./category";
 import { Brand } from "./brand";
+import Joi from "joi";
 
 const Product = sequelize.define('Product', {
     id: {
@@ -57,6 +58,36 @@ const Product = sequelize.define('Product', {
 Category.hasMany(Product, { foreignKey: 'categoryId' });
 Brand.hasMany(Product, { foreignKey: 'brandId' });
 
+
+function validationCreateProduct(input){
+    const schema = Joi.object({
+        productName: Joi.string().required(),
+        productDescription: Joi.string().required(),
+        productPrice: Joi.number().required(),
+    });
+
+    return schema.validate(input);
+}
+
+function validationUpdateProduct(input){
+    const schema = Joi.object({
+        productName: Joi.string().optional(),
+        productDescription: Joi.string().optional(),
+        productPrice: Joi.number().optional(),
+    });
+    return schema.validate(input);
+}
+
+function validationDeleteProduct(input){
+    const schema = Joi.object({
+        id: Joi.number().required(),
+    });
+    return schema.validate(input);
+}
+
 export {
-    Product
+    Product,
+    validationCreateProduct,
+    validationUpdateProduct,
+    validationDeleteProduct
 }
