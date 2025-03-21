@@ -64,6 +64,9 @@ function validationCreateProduct(input){
         productName: Joi.string().required(),
         productDescription: Joi.string().required(),
         productPrice: Joi.number().required(),
+        stock: Joi.number().required(),
+        categoryId: Joi.number().required(),
+        brandId: Joi.number().required(),
     });
 
     return schema.validate(input);
@@ -74,6 +77,9 @@ function validationUpdateProduct(input){
         productName: Joi.string().optional(),
         productDescription: Joi.string().optional(),
         productPrice: Joi.number().optional(),
+        stock: Joi.number().optional(),
+        categoryId: Joi.number().optional(),
+        brandId: Joi.number().optional(),
     });
     return schema.validate(input);
 }

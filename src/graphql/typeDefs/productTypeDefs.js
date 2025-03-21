@@ -44,7 +44,7 @@ const productTypeDefs = gql`
 
     type Mutation {
         createProduct(input: ProductInput!): Product!
-        updateProduct(id: ID!, input: ProductInput!): Product!
+        updateProduct(id: ID!, input: ProductUpdateInput!): Product!
         deleteProduct(id: ID!): Product!
     }
 `;

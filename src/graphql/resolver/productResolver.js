@@ -4,7 +4,7 @@ import { Product,
     validationUpdateProduct,
     validationDeleteProduct
 } from "../../model/product";
-import { authenticateUser } from "../../lib/authCheck";
+import { authenticateIsAdmin } from "../../lib/authCheck";
 import { Brand, Category } from "../../model/product";
 
 
@@ -60,7 +60,59 @@ const productResolver = {
                 throw new ApolloError(error.message, "500");
             }
         }
+    },
+
+    Mutation: {
+        createProduct: async (_, {input}, {req}) => {
+            try {
+                authenticateIsAdmin(req);
+
+                const {error} = validationCreateProduct(input);
+                if(error){
+                    throw new ApolloError(error.message, "400");
+                }
+
+                const brand = await Brand.findByPk(input.brandId);
+                if(!brand){
+                    throw new ApolloError("Brand not found", "404");
+                }
+
+                const category = await Category.findByPk(input.categoryId);
+                if(!category){
+                    throw new ApolloError("Category not found", "404");
+                }
+
+                const product = await Product.create(input);
+                return product;
+            } catch (error) {
+                throw new ApolloError(error.message, "500");
+            }
+        },
+
+        updateProduct: async (_, {id, input}, {req}) => {
+            try {
+                authenticateIsAdmin(req);
+
+                const {error} = validationUpdateProduct(input);
+                if(error){
+                    throw new ApolloError(error.message, "400");
+                }
+
+                const product = await Product.findByPk(id);
+                if(!product){
+                    throw new ApolloError("Product not found", "404");
+                }
+
+                await product.update(input);
+                return product;
+            } catch (error) {
+                throw new ApolloError(error.message, "500");
+            }
+        },
+
+        // @TODO: Implement deleteProduct and check if the product is in bid
     }
+    
 }
 
 
