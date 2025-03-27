@@ -1,9 +1,29 @@
-    // type Category {
-    //     id: Int!
-    //     categoryName: String!
-    // }
+import gql from 'graphql';
 
-    // type Brand {
-    //     id: Int!
-    //     brandName: String!
-    // }
+
+const categoryTypeDefs = gql`
+    type Category {
+        id: ID!
+        categoryName: String!
+    }
+
+    type EditInput {
+        categoryName: STRING
+    }
+
+    type createInput {
+        categoryName: STRING!
+    }
+
+    type Query {
+        getCategories: [Category!]!,
+    }
+    
+    type Mutation {
+        createCategory(input: createInput!): Category!,
+        updateCategory(input: EditInput!, id: ID!): Category!,
+        deleteCategory(id: ID!): Category
+    }
+`;
+
+export default categoryTypeDefs;

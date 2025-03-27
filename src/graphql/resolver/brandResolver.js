@@ -1,7 +1,7 @@
 import { ApolloError } from "apollo-server-express";
 import { Brand, validationCreateBrand, validationUpdateBrand } from "../../model/brand";
 import { authenticateUser } from "../../lib/authCheck";
-
+import { Product } from "../../model/product";
 
 const brandResovler = {
     Query: {
@@ -19,16 +19,16 @@ const brandResovler = {
     },
 
     Mutation: {
-        createBrand: async(_, {input}) => {
+        createBrand: async (_, { input }) => {
             try {
-                const {error} = validationCreateBrand(input);
-                if(error){
-                    throw new ApolloError(error.details[0].message,"400");
+                const { error } = validationCreateBrand(input);
+                if (error) {
+                    throw new ApolloError(error.details[0].message, "400");
                 }
 
                 const isExists = await Brand.findOne({ where: { brandName: input.brandName } });
-                if(isExists){
-                    throw new ApolloError("Brand name already exists","400");
+                if (isExists) {
+                    throw new ApolloError("Brand name already exists", "400");
                 }
 
                 const brand = await Brand.create({
@@ -41,29 +41,49 @@ const brandResovler = {
             }
         },
 
-        updateBrand: async(_, {input, id}, {req}) => {
+        updateBrand: async (_, { input, id }, { req }) => {
             try {
-                
+
                 authenticateUser(req);
 
-                const {error} = validationUpdateBrand(input);
-                if(error){
-                    throw new ApolloError(error.details[0].message,"400");
+                const { error } = validationUpdateBrand(input);
+                if (error) {
+                    throw new ApolloError(error.details[0].message, "400");
                 }
 
                 const brand = await Brand.findByPk(id);
-                if(!brand){
+                if (!brand) {
                     throw new ApolloError("Brand not found", "404");
                 }
 
                 await brand.update(input);
                 return brand;
             } catch (error) {
-                throw new ApolloError(error.message, "500");  
+                throw new ApolloError(error.message, "500");
             }
         },
 
-        //@TODO delete method : check if it use in brand model
+        deleteBrand: async (_, { id }, { req }) => {
+            try {
+                authenticateUser(req);
+
+                const brandUsed = await Product.findOne({ where: { brandId: id } });
+                if (brandUsed) {
+                    throw new ApolloError("Brand is used in product", "400");
+                }
+
+                const brand = await Brand.findByPk(id);
+                if (!brand) {
+                    throw new ApolloError("Brand not found", "404");
+                }
+
+                await brand.destroy();
+                return "Brand deleted successfully";
+
+            } catch (error) {
+                throw new ApolloError(error.message, "500");
+            }
+        }
     }
 };
 
