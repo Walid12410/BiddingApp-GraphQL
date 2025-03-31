@@ -2,11 +2,11 @@ import { ApolloError } from "apollo-server-express";
 import { Product,
      validationCreateProduct,
     validationUpdateProduct,
-    validationDeleteProduct
 } from "../../model/product";
 import { authenticateIsAdmin } from "../../lib/authCheck";
-import { Brand, Category } from "../../model/product";
-
+import { Brand } from "../../model/brand";
+import { Category } from "../../model/category";
+import { Bid } from "../../model/bid";
 
 
 const productResolver = {
@@ -110,7 +110,30 @@ const productResolver = {
             }
         },
 
-        // @TODO: Implement deleteProduct and check if the product is in bid
+        deleteProduct: async (_, {id}, {req}) => {
+            try {
+                authenticateIsAdmin(req);
+
+                const product = await Product.findByPk(id);
+                if(!product){
+                    throw new ApolloError("Product not found", "404");
+                }
+
+                const productInBid = await Bid.findOne({
+                    where: {
+                        productId: id
+                    }
+                });
+                if(productInBid){
+                    throw new ApolloError("Product is in bid", "400");
+                }
+
+                await product.destroy();
+                return "Product deleted successfully";
+            } catch (error) {
+                throw new ApolloError(error.message, "500");
+            }
+        }
     }
     
 }

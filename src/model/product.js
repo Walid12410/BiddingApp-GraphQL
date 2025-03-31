@@ -55,8 +55,11 @@ const Product = sequelize.define('Product', {
     }
 });
 
-Category.hasMany(Product, { foreignKey: 'categoryId' });
-Brand.hasMany(Product, { foreignKey: 'brandId' });
+Category.hasMany(Product, { foreignKey: 'categoryId', onDelete: 'CASCADE' });
+Product.belongsTo(Category, { foreignKey: 'categoryId' });
+
+Brand.hasMany(Product, { foreignKey: 'brandId', onDelete: 'CASCADE' });
+Product.belongsTo(Brand, { foreignKey: 'brandId' });
 
 
 function validationCreateProduct(input){
@@ -84,16 +87,9 @@ function validationUpdateProduct(input){
     return schema.validate(input);
 }
 
-function validationDeleteProduct(input){
-    const schema = Joi.object({
-        id: Joi.number().required(),
-    });
-    return schema.validate(input);
-}
 
 export {
     Product,
     validationCreateProduct,
     validationUpdateProduct,
-    validationDeleteProduct
 }

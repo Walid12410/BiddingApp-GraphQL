@@ -47,6 +47,31 @@ Product.hasOne(Bid, { foreignKey: 'productId' });
 User.hasOne(User, { foreignKey: 'winner' });
 
 
+function validationCreateBid(input){
+    const schema = Joi.object({
+        startPrice: Joi.number().required(),
+        startDate: Joi.date().required(),
+        endDate: Joi.date().required(),
+        status: Joi.string().required(),
+        productId: Joi.number().required(),
+    });
+
+    return schema.validate(input);
+}
+
+function validationUpdateBid(input){
+    const schema = Joi.object({
+        startPrice: Joi.number().optional(),
+        startDate: Joi.date().optional(),
+        endDate: Joi.date().optional(),
+        status: Joi.string().optional(),
+    });
+
+    return schema.validate(input);
+}
+
 export {
-    Bid
+    Bid,
+    validationCreateBid,
+    validationUpdateBid
 }
