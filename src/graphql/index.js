@@ -9,13 +9,16 @@ import productTypeDefs from "./typeDefs/productTypeDefs";
 import productResolver from "./resolver/productResolver";
 import bidTypeDefs from "./typeDefs/bidTypeDefs";
 import bidResolver from "./resolver/bidResolver";
+import bidAmtTypeDefs from "./typeDefs/bidAmtTypeDefs";
+import bidAmtResolver from "./resolver/bidAmtResolver";
 
 const typeDefs = mergeTypeDefs([
     userTypeDefs,
     brandTypeDefs,
     productTypeDefs,
     categoryTypeDefs,
-    bidTypeDefs
+    bidTypeDefs,
+    bidAmtTypeDefs
 ]);
 
 const resolvers = mergeResolvers([
@@ -23,7 +26,8 @@ const resolvers = mergeResolvers([
     brandResovler,
     productResolver,
     categoryResolver,
-    bidResolver
+    bidResolver,
+    bidAmtResolver
 ]);
 
 export {
