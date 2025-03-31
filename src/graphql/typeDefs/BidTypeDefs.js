@@ -20,6 +20,13 @@ const BidTypeDefs = gql`
         productId: ID!
     }
 
+    type BidUpdateInput {
+        startPrice: Int
+        startDate: String
+        endDate: String
+        status: String
+    }
+
     type Query {
         getBids: [Bid!]!
         getBid(id: ID!): Bid!
@@ -27,8 +34,8 @@ const BidTypeDefs = gql`
 
     type Mutation {
         createBid(input: BidInput!): Bid!
-        updateBid(id: ID!, input: BidInput!): Bid!
-        deleteBid(id: ID!): Bid!
+        updateBid(id: ID!, input: BidUpdateInput!): Bid!
+        deleteBid(id: ID!): Boolean!
     }
 `;
 

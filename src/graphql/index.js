@@ -7,7 +7,7 @@ import categoryTypeDefs from "./typeDefs/categoryTypeDefs";
 import categoryResolver from "./resolver/categoryResolver";
 import productTypeDefs from "./typeDefs/productTypeDefs";
 import productResolver from "./resolver/productResolver";
-import bidTypeDefs from "./typeDefs/BidTypeDefs";
+import bidTypeDefs from "./typeDefs/bidTypeDefs";
 import bidResolver from "./resolver/bidResolver";
 
 const typeDefs = mergeTypeDefs([
